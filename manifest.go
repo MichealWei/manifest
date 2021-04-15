@@ -149,26 +149,28 @@ func processDirAndGenerateMeta(dir string) *FilesInfoList {
 			if err != nil {
 				return err
 			}
-			if !strings.HasSuffix(path, ".cxo") && info.Name() != appName {
-				if info.IsDir() {
-					directories = append(directories, path)
-					dirSize, err := getDirectorySize(path)
-					if err != nil {
-						return err
-					}
-					directoriesSize = append(directoriesSize, dirSize)
-				} else {
-					files = append(files, path)
-					filesSize = append(filesSize, int(info.Size()))
-					filesHash = append(filesHash, []byte(hashFileAndEncoding(path)))
-					chunkshashes, err := getChunkHashes(path)
-					if err != nil {
-						return err
-					}
-					fileschunksList = append(fileschunksList, *chunkshashes)
-
-					filesMetaList = append(filesMetaList, getFileMeta(path))
+			 
+			if info.IsDir() {
+				if  info.Name() == ".cxo" {
+					return filepath.SkipDir
 				}
+				directories = append(directories, path)
+				dirSize, err := getDirectorySize(path)
+				if err != nil {
+					return err
+				}
+				directoriesSize = append(directoriesSize, dirSize)
+			} else if info.Name() != appName{
+				files = append(files, path)
+				filesSize = append(filesSize, int(info.Size()))
+				filesHash = append(filesHash, []byte(hashFileAndEncoding(path)))
+				chunkshashes, err := getChunkHashes(path)
+				if err != nil {
+					return err
+				}
+				fileschunksList = append(fileschunksList, *chunkshashes)
+
+				filesMetaList = append(filesMetaList, getFileMeta(path))
 			}
 
 			return nil

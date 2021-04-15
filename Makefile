@@ -8,8 +8,8 @@ GOGET=$(GOCMD) get
 
 # Binary names
 BINARY_NAME=manifest
-MAIN=main.go
-CUSTOMEtYPES=customeType.go
+MAIN=manifest.go
+CUSTOMEtYPES=manifestTypes.go
 
 # CLI command and flags
 INIT=init
